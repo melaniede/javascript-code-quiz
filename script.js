@@ -45,27 +45,22 @@ const questions = [
        }
     ];
 
-// getElementById("startQuiz");
-let startQuizEl = document.querySelector("#test");
+// Link to elements on the HTML page
+let startQuizEl = document.getElementById("test");
+let timerEl = document.getElementById("time");
+let questionsDisplayEl = document.getElementById("questionsDisplay"); 
+let questionsEl = document.getElementById("questions");
+let choicesEl = document.getElementById("choices");
+
+let time = 100;
+let timerId;
+
 startQuizEl.addEventListener("click", startQuizFunction);
 
-
 function startQuizFunction() {
-    var sec = 60;
-    function startTimer(){
-        console.log('timer suppose to go')
-        var timer = setInterval(function(){
-            sec--;
-            document.getElementById('timerDisplay').innerHTML='00:'+sec;
-            if (sec < 0) {
-                clearInterval(timer);
-                alert("Time is up!")
-            }
-        }, 1000);
-    }
-    document.getElementById('incorrect').addEventListener('click', function() {
-        sec -= 5;
-        document.getElementById('timerDisplay').innerHTML='00:'+sec;
-    });
-    startTimer();
-}
+    console.log("inside startQuizFunction");
+    timerId = setInterval(function() {
+        time--;
+        timerEl.textContent = time;
+    }, 1000)}
+  
