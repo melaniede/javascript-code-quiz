@@ -51,10 +51,12 @@ let timerEl = document.getElementById("time");
 let questionsDisplayEl = document.getElementById("questionsDisplay"); 
 let questionsEl = document.getElementById("question");
 let choicesEl = document.getElementById("choices");
+let finalScoreDisplayEl = document.getElementById("finalScoreDisplay");
+let finalScoreEl = document.getElementById("finalScore");
 
 // Timer variables 
 let time = 100;
-let timerId;
+let timerInterval;
 
 // Question variables 
 let questionIndex = 0;
@@ -62,22 +64,20 @@ let questionIndex = 0;
 startQuizEl.addEventListener("click", startQuizFunction);
 
 function startTimerFunction() {
-    console.log("inside startQuizTimer");
-    timerId = setInterval(function() {
+    timerInterval = setInterval(function() {
         time--;
         timerEl.textContent = time;
         if (time <= 0){
-            clearInterval(timerId);
+            clearInterval(timerInterval);
             endQuiz();
         }
     }, 1000)
 }
 
 function startQuizFunction() {
-    console.log("inside startQuizFunction");
     //Start with quiz hiding
-   displayQuestionsFunction();
-   startTimerFunction();
+    startTimerFunction();
+    displayQuestionsFunction();
 }
 
 function displayQuestionsFunction(){
@@ -85,10 +85,11 @@ function displayQuestionsFunction(){
     let currentQuestion = questions[questionIndex];
     questionsEl.textContent = currentQuestion.question;
 
-    //Display possible answers
-    let possibleChoices = 
+    //Display choices as buttons
 
-    currentQuestion.choices.forEach(function(choice,i){
+    choicesEl.innerHTML = "";
+
+    currentQuestion.choices.forEach(function(choice, i){
         let choiceButton = document.createElement("button")
         choiceButton.setAttribute("class", "choice");
         choiceButton.setAttribute("value", choice);
@@ -102,14 +103,38 @@ function displayQuestionsFunction(){
 function questionClick(){
     // If answer is incorrect 10 seconds is subtracted from the time
     if (this.value !== questions[questionIndex].answer){
-        time -= 10;
-
-        //
+        time -= 10; 
+    // Move to next question in index
+        questionIndex++;
+        displayQuestionsFunction();
+     // If timer gets below 0, set it to 0
         if (time < 0){
             time = 0;
         }
+    // Display new time
+        timerEl.textContent = time;
+
+          
+    
+    // Check to see if index questions are complete
     }
-    timerEl.textContent = time;
+    else if(questionIndex === questions.length-1) {
+        endQuiz();
+    }
+    // If questions remain, move to next question     
+    else{
+        questionIndex++; 
+        displayQuestionsFunction();
+    }
+}
+
+function endQuiz() {
+// Stop timer 
+    clearInterval(timerInterval);
+
+// Display final score
+finalScoreEl.textContent = time;
+
 }
 
 
