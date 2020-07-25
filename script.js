@@ -49,18 +49,68 @@ const questions = [
 let startQuizEl = document.getElementById("test");
 let timerEl = document.getElementById("time");
 let questionsDisplayEl = document.getElementById("questionsDisplay"); 
-let questionsEl = document.getElementById("questions");
+let questionsEl = document.getElementById("question");
 let choicesEl = document.getElementById("choices");
 
+// Timer variables 
 let time = 100;
 let timerId;
 
+// Question variables 
+let questionIndex = 0;
+
 startQuizEl.addEventListener("click", startQuizFunction);
 
-function startQuizFunction() {
-    console.log("inside startQuizFunction");
+function startTimerFunction() {
+    console.log("inside startQuizTimer");
     timerId = setInterval(function() {
         time--;
         timerEl.textContent = time;
-    }, 1000)}
-  
+        if (time <= 0){
+            clearInterval(timerId);
+            endQuiz();
+        }
+    }, 1000)
+}
+
+function startQuizFunction() {
+    console.log("inside startQuizFunction");
+    //Start with quiz hiding
+   displayQuestionsFunction();
+   startTimerFunction();
+}
+
+function displayQuestionsFunction(){
+    //Display question
+    let currentQuestion = questions[questionIndex];
+    questionsEl.textContent = currentQuestion.question;
+
+    //Display possible answers
+    let possibleChoices = 
+
+    currentQuestion.choices.forEach(function(choice,i){
+        let choiceButton = document.createElement("button")
+        choiceButton.setAttribute("class", "choice");
+        choiceButton.setAttribute("value", choice);
+        
+        choiceButton.textContent = choice;
+
+        choiceButton.onclick = questionClick;
+        choicesEl.appendChild(choiceButton);
+    })
+
+function questionClick(){
+    // If answer is incorrect 10 seconds is subtracted from the time
+    if (this.value !== questions[questionIndex].answer){
+        time -= 10;
+
+        //
+        if (time < 0){
+            time = 0;
+        }
+    }
+    timerEl.textContent = time;
+}
+
+
+}
